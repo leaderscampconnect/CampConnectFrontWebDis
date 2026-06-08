@@ -1,0 +1,17 @@
+{
+  "/api": {
+    "target": "http://localhost:9001",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/swagger-ui.html": {
+    "target": "http://localhost:9001",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/swagger-ui": {
+    "target": "http://localhost:9001",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

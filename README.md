@@ -1,59 +1,73 @@
-# CampconnectFront
+# CampConnect Angular Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.25.
+Angular 19 frontend integrated with the CampConnect API Gateway and Keycloak.
+It is a browser-only application served by Nginx in the team Docker Compose
+stack.
 
-## Development server
+## Implemented Workflows
 
-To start a local development server, run:
+- Browse published events without signing in.
+- Authenticate with the `campconnect` Keycloak realm using Authorization Code
+  Flow with PKCE.
+- Attach bearer tokens to `/api/**` requests.
+- Create events as an `ADMIN` or `ORGANIZER`.
+- Register for events or join a full event's waitlist.
+- Load persisted notifications for the signed-in Keycloak user.
+- Mark one or all notifications as read.
+- Display structured backend error messages.
 
-```bash
-ng serve
-```
+## API Contracts
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The application calls relative gateway URLs:
 
-## Code scaffolding
+| Method and route | Purpose |
+| --- | --- |
+| `GET /api/events?published=true` | Public event catalogue |
+| `POST /api/events` | Organizer event creation |
+| `POST /api/events/{id}/registrations` | Participant registration |
+| `GET /api/notifications?recipientId={sub}` | Current user's notifications |
+| `PATCH /api/notifications/{id}/read` | Mark one notification read |
+| `PATCH /api/notifications/recipient/{sub}/read-all` | Mark all read |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The recipient/participant identifier is the Keycloak token `sub`, giving the
+event and notification services one stable identity value.
 
-```bash
-ng generate component component-name
-```
+## Local Development
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Start Keycloak on port `8180` and the gateway on `9001`, then run:
 
 ```bash
-ng test
+npm ci
+npm start
 ```
 
-## Running end-to-end tests
+`proxy.conf.json` forwards API and Swagger traffic to the gateway. Open
+http://localhost:4200.
 
-For end-to-end (e2e) testing, run:
+## Build and Test
 
 ```bash
-ng e2e
+npm run build
+npm test -- --watch=false --browsers=ChromeHeadless
+docker build -t campconnect/frontend .
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The production image serves the Angular bundle through Nginx and proxies
+`/api`, `/openapi`, and Swagger requests to `api-gateway:9001`.
 
-## Additional Resources
+## Authentication Configuration
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The Keycloak URL uses the current browser hostname with port `8180`, realm
+`campconnect`, and public client `campconnect-web`. The matching realm import
+and development accounts are maintained in the deployment repository.
+
+For a cloud deployment, expose Keycloak through the same ingress and replace
+the local port-based URL with runtime configuration.
+
+## Project Structure
+
+- `src/app/core`: Keycloak service and HTTP interceptor
+- `src/app/models`: event and notification API contracts
+- `src/app/services`: typed API clients
+- `src/app/app.component.*`: integrated dashboard and organizer form
+- `nginx.conf`: production API proxy and SPA fallback
