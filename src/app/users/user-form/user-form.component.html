@@ -1,0 +1,195 @@
+<div class="page">
+
+  <button class="back-btn" (click)="goBack()">
+    <span class="arrow">←</span> Retour à la liste
+  </button>
+
+  <div class="form-card">
+
+    <!-- Header -->
+    <div class="card-header">
+      <div class="header-icon" [class.edit-mode]="isEditMode">
+        {{ isEditMode ? '✏' : '+' }}
+      </div>
+      <div>
+        <h1 class="card-title">
+          {{ isEditMode ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}
+        </h1>
+        <p class="card-subtitle">
+          {{ isEditMode ? 'Mettez à jour les informations du profil' : 'Remplissez les informations du nouveau compte' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Alertes -->
+    <div class="alert alert-error" *ngIf="errorMessage">
+      <span class="alert-icon">!</span>
+      <span>{{ errorMessage }}</span>
+      <button class="alert-close" (click)="errorMessage = ''">×</button>
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+      <span class="alert-icon">✓</span>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <!-- Formulaire -->
+    <form (ngSubmit)="onSubmit()" #userForm="ngForm" class="form" novalidate>
+
+      <div class="form-row">
+
+        <div class="field">
+          <label class="field-label" for="firstName">
+            Prénom <span class="required">*</span>
+          </label>
+          <input
+            id="firstName"
+            class="field-input"
+            [(ngModel)]="user.firstName"
+            name="firstName"
+            required
+            placeholder="ex: Ahmed"
+            #firstName="ngModel"
+            [class.invalid]="firstName.invalid && firstName.touched">
+          <span class="field-error" *ngIf="firstName.invalid && firstName.touched">
+            Le prénom est obligatoire
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="lastName">
+            Nom <span class="required">*</span>
+          </label>
+          <input
+            id="lastName"
+            class="field-input"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            required
+            placeholder="ex: Ben Ali"
+            #lastName="ngModel"
+            [class.invalid]="lastName.invalid && lastName.touched">
+          <span class="field-error" *ngIf="lastName.invalid && lastName.touched">
+            Le nom est obligatoire
+          </span>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="email">
+          Email <span class="required">*</span>
+        </label>
+        <div class="input-wrapper">
+          <span class="input-prefix">✉</span>
+          <input
+            id="email"
+            class="field-input has-prefix"
+            [(ngModel)]="user.email"
+            name="email"
+            type="email"
+            required
+            placeholder="exemple@email.com"
+            #email="ngModel"
+            [class.invalid]="email.invalid && email.touched">
+        </div>
+        <span class="field-error" *ngIf="email.invalid && email.touched">
+          Adresse email invalide
+        </span>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="password">
+          Mot de passe
+          <span class="required" *ngIf="!isEditMode">*</span>
+          <span class="field-hint" *ngIf="isEditMode">(laisser vide = inchangé)</span>
+        </label>
+        <div class="input-wrapper">
+          <span class="input-prefix">🔒</span>
+          <input
+            id="password"
+            class="field-input has-prefix"
+            [(ngModel)]="user.password"
+            name="password"
+            [type]="showPassword ? 'text' : 'password'"
+            [required]="!isEditMode"
+            placeholder="Minimum 6 caractères"
+            #password="ngModel"
+            [class.invalid]="password.invalid && password.touched">
+          <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+            {{ showPassword ? '🙈' : '👁' }}
+          </button>
+        </div>
+        <span class="field-error" *ngIf="password.invalid && password.touched">
+          Mot de passe obligatoire (min. 6 caractères)
+        </span>
+      </div>
+
+      <div class="form-row">
+
+        <div class="field">
+          <label class="field-label" for="phone">
+            Téléphone
+            <span class="field-hint">(8 chiffres)</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">📱</span>
+            <input
+              id="phone"
+              class="field-input has-prefix"
+              [(ngModel)]="user.phone"
+              name="phone"
+              pattern="[0-9]{8}"
+              placeholder="ex: 20123456"
+              #phone="ngModel"
+              [class.invalid]="phone.invalid && phone.touched">
+          </div>
+          <span class="field-error" *ngIf="phone.invalid && phone.touched">
+            8 chiffres requis
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="role">
+            Rôle <span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">🪪</span>
+            <select
+              id="role"
+              class="field-input has-prefix"
+              [(ngModel)]="user.role"
+              name="role"
+              required>
+              <option value="" disabled>Choisir un rôle</option>
+              <option *ngFor="let r of roles" [value]="r">
+                {{ getRoleLabel(r) }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Role preview -->
+      <div class="role-preview" *ngIf="user.role">
+        <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">
+          {{ getRoleLabel(user.role) }}
+        </span>
+        <span class="role-desc">{{ getRoleDesc(user.role) }}</span>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="goBack()">
+          Annuler
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="userForm.invalid">
+          <span class="btn-spinner" *ngIf="submitting"></span>
+          {{ isEditMode ? 'Enregistrer les modifications' : 'Créer le compte' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">Utilisateurs</h1>
+      <span class="count-badge" *ngIf="users.length > 0">{{ users.length }}</span>
+    </div>
+    <button class="btn-primary" (click)="goToCreate()">
+      <span class="btn-icon">+</span> Nouvel utilisateur
+    </button>
+  </div>
+
+  <!-- États -->
+  <div class="state-loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <span>Chargement des utilisateurs…</span>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage && !loading">
+    <span class="alert-icon">!</span> {{ errorMessage }}
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper" *ngIf="!loading && users.length > 0">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th class="col-id">#</th>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th class="col-role">Rôle</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; let i = index" class="table-row">
+          <td class="col-id muted">{{ user.id }}</td>
+          <td class="fw-medium">{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td class="email-cell">
+            <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+          </td>
+          <td class="col-role">
+            <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">
+              {{ getRoleLabel(user.role) }}
+            </span>
+          </td>
+          <td class="col-actions">
+            <div class="actions-group">
+              <button class="action-btn btn-view"
+                (click)="router.navigate(['/users', user.id])"
+                title="Voir le profil">
+                <span>👁</span>
+              </button>
+              <button class="action-btn btn-edit"
+                (click)="goToEdit(user.id!)"
+                title="Modifier">
+                <span>✏</span>
+              </button>
+              <button class="action-btn btn-delete"
+                (click)="deleteUser(user.id!)"
+                title="Supprimer">
+                <span>🗑</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Vide -->
+  <div class="state-empty" *ngIf="!loading && users.length === 0">
+    <div class="empty-icon">👥</div>
+    <p>Aucun utilisateur trouvé.</p>
+    <button class="btn-primary" (click)="goToCreate()">Créer le premier</button>
+  </div>
+
+</div>

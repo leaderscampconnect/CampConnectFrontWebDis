@@ -69,5 +69,5 @@ the local port-based URL with runtime configuration.
 - `src/app/core`: Keycloak service and HTTP interceptor
 - `src/app/models`: event and notification API contracts
 - `src/app/services`: typed API clients
-- `src/app/app.component.*`: original team interface
+- `src/app/app.component.*`: root outlet for the team's routed interface
 - `nginx.conf`: production API proxy and SPA fallback

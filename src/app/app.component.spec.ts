@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('campconnect-front');
   });
 
-  it('should render title', () => {
+  it('should expose the team router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, campconnect-front');
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

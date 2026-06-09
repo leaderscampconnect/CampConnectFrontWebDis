@@ -1,0 +1,167 @@
+<div class="page">
+
+  <!-- Back -->
+  <button class="back-btn" (click)="goBack()">
+    <span class="arrow">←</span> Retour à la liste
+  </button>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    Chargement du profil…
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="errorMessage && !loading">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="user && !loading">
+
+    <!-- ── Hero ─────────────────────────────────────── -->
+    <div class="hero-card">
+      <div class="hero-inner">
+
+        <div class="avatar">{{ getInitials() }}</div>
+
+        <div class="hero-info">
+          <h1 class="hero-name">{{ user.firstName }} {{ user.lastName }}</h1>
+          <span class="role-badge">{{ getRoleLabel(user.role) }}</span>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn-edit" (click)="goToEdit()">✏️ Modifier</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Tabs ──────────────────────────────────────── -->
+    <div class="tabs-bar">
+      <button class="tab-btn" [class.active]="activeTab === 'info'"
+        (click)="activeTab = 'info'">
+        📋 Informations
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'sites'"
+        (click)="loadCampSites()">
+        🏕️ Sites de camping
+      </button>
+    </div>
+
+    <!-- ── Body ──────────────────────────────────────── -->
+    <div class="body-card">
+
+      <!-- Tab : Infos -->
+      <div *ngIf="activeTab === 'info'">
+        <div class="info-grid">
+
+          <div class="info-item">
+            <span class="info-label">Prénom</span>
+            <span class="info-value">
+              <span class="icon">👤</span> {{ user.firstName }}
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Nom</span>
+            <span class="info-value">
+              <span class="icon">👤</span> {{ user.lastName }}
+            </span>
+          </div>
+
+          <div class="info-divider"></div>
+
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">
+              <span class="icon">✉️</span>
+              <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Téléphone</span>
+            <span class="info-value">
+              <span class="icon">📱</span>
+              {{ user.phone || '—' }}
+            </span>
+          </div>
+
+          <div class="info-divider"></div>
+
+          <div class="info-item">
+            <span class="info-label">Rôle</span>
+            <span class="info-value">
+              {{ getRoleLabel(user.role) }}
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Membre depuis</span>
+            <span class="info-value">
+              <span class="icon">📅</span>
+              {{ formatDate(user.createdAt) }}
+            </span>
+          </div>
+
+          <div class="info-divider"></div>
+
+          <div class="info-item">
+            <span class="info-label">ID Utilisateur</span>
+            <span class="info-value" style="color:#9ca3af;font-size:13px">
+              #{{ user.id }}
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab : Sites -->
+      <div *ngIf="activeTab === 'sites'">
+
+        <div class="sites-header">
+          <h2 class="sites-title">Sites disponibles</h2>
+          <span class="sites-count" *ngIf="campSites.length > 0">
+            {{ campSites.length }} sites
+          </span>
+        </div>
+
+        <!-- Loading sites -->
+        <div class="loading-state" *ngIf="loadingSites">
+          <div class="spinner"></div>
+          Connexion au service de camping…
+        </div>
+
+        <!-- Sites grid -->
+        <div class="sites-grid" *ngIf="!loadingSites && campSites.length > 0">
+          <div class="site-card" *ngFor="let site of campSites">
+            <p class="site-name">{{ site.name }}</p>
+            <p class="site-location">📍 {{ site.location }}</p>
+            <div class="site-footer">
+              <span class="site-price">{{ site.pricePerNight }} DT / nuit</span>
+              <span class="site-avail" [class.yes]="site.available" [class.no]="!site.available">
+                {{ site.available ? '✓ Disponible' : '✗ Complet' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty -->
+        <div class="empty-state" *ngIf="!loadingSites && campSites.length === 0">
+          <div class="empty-icon">🏕️</div>
+          Aucun site disponible pour le moment.<br>
+          <small style="font-size:12px;margin-top:8px;display:block">
+            Le service campsite n'est peut-être pas encore démarré.
+          </small>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /body-card -->
+
+  </div>
+  <!-- /user -->
+
+</div>

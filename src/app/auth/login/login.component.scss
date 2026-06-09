@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:host {
+  --forest:     #1a6b3c;
+  --moss:       #2d8a55;
+  --moss-light: #e8f4f0;
+  --cream:      #faf8f3;
+  --charcoal:   #1c1c1c;
+  --muted:      #6b7280;
+  --border:     #e2e8e4;
+  --red:        #b91c1c;
+  --red-light:  #fee2e2;
+
+  display: flex;
+  min-height: 100vh;
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 24px;
+}
+
+.auth-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 4px 24px rgba(26, 107, 60, 0.10);
+}
+
+/* ── Logo ─────────────────────────────────────────────── */
+.auth-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.logo-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.logo-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--forest);
+  margin: 0 0 4px;
+}
+
+.logo-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Header ───────────────────────────────────────────── */
+.auth-header {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.auth-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--charcoal);
+  margin: 0 0 6px;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Alerte ───────────────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 20px;
+
+  .alert-icon { font-weight: 700; }
+}
+
+.alert-error {
+  background: var(--red-light);
+  color: var(--red);
+  border: 1px solid #fca5a5;
+}
+
+/* ── Formulaire ───────────────────────────────────────── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.required { color: var(--red); }
+
+.forgot-link {
+  background: none;
+  border: none;
+  color: var(--forest);
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+
+  &:hover { text-decoration: underline; }
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  opacity: 0.6;
+  &:hover { opacity: 1; }
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--charcoal);
+  background: #fff;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  outline: none;
+  box-sizing: border-box;
+
+  &.has-prefix { padding-left: 38px; }
+  &::placeholder { color: #b0b8c1; }
+  &:focus {
+    border-color: var(--forest);
+    box-shadow: 0 0 0 3px rgba(26, 107, 60, 0.12);
+  }
+  &.invalid {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.10);
+  }
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 500;
+}
+
+/* ── Bouton ───────────────────────────────────────────── */
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--forest);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.18s, transform 0.15s;
+  letter-spacing: 0.02em;
+
+  &:hover:not(:disabled) {
+    background: var(--moss);
+    transform: translateY(-1px);
+  }
+  &:disabled {
+    background: #a5c4b2;
+    cursor: not-allowed;
+  }
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
