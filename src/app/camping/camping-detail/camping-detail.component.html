@@ -1,0 +1,75 @@
+<section class="section">
+  @if (loading()) {
+    <p class="empty-state">Loading camping details...</p>
+  } @else if (error() && !camping()) {
+    <p class="empty-state error">{{ error() }}</p>
+  } @else {
+    @if (camping(); as camp) {
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">{{ camp.localisation }}</p>
+          <h2>{{ camp.nom }}</h2>
+        </div>
+        <a class="button button-quiet" href="/campings">Back to List</a>
+      </div>
+
+      <div class="event-grid">
+        <article class="event-card" style="grid-column: 1 / -1;">
+          <p>{{ camp.description }}</p>
+          <dl class="event-facts">
+            <div>
+              <dt>Capacity</dt>
+              <dd>{{ camp.capacite }} people</dd>
+            </div>
+            <div>
+              <dt>Price</dt>
+              <dd>{{ camp.prixParNuit | currency:'TND':'symbol':'1.0-2' }} / night</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd>{{ camp.statutDispo }}</dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+
+      @if (auth.hasAnyRole('CAMPER', 'ADMIN')) {
+        <div class="create-section" style="margin-top: 2rem;">
+          <h3>Book this Camping</h3>
+
+          @if (bookingMessage()) {
+            <div class="feedback success">{{ bookingMessage() }}</div>
+          }
+          @if (error()) {
+            <div class="feedback error">{{ error() }}</div>
+          }
+
+          <form [formGroup]="bookingForm" (ngSubmit)="book()">
+            <label>
+              Start Date
+              <input type="date" formControlName="dateDebut">
+            </label>
+            <label>
+              End Date
+              <input type="date" formControlName="dateFin">
+            </label>
+            <label>
+              Number of Guests
+              <input type="number" formControlName="numberOfGuests" min="1">
+            </label>
+            <button class="button button-primary full-width" type="submit" [disabled]="submitting()">
+              {{ submitting() ? 'Processing...' : 'Confirm Booking' }}
+            </button>
+          </form>
+        </div>
+      } @else {
+        <div class="create-section" style="margin-top: 2rem; text-align: center;">
+          <p>You must be signed in as a Camper to book this site.</p>
+          @if (!auth.authenticated()) {
+            <button class="button button-primary" (click)="auth.login()">Sign in</button>
+          }
+        </div>
+      }
+    }
+  }
+</section>
