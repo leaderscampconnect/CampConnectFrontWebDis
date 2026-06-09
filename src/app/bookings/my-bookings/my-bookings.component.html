@@ -1,0 +1,50 @@
+<section class="section">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Booking Dashboard</p>
+      <h2>My Reservations</h2>
+    </div>
+    <button class="button button-quiet" type="button" (click)="loadBookings()">Refresh</button>
+  </div>
+
+  @if (error()) {
+    <div class="feedback error" role="alert">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="empty-state">Loading bookings...</p>
+  } @else if (bookings().length === 0) {
+    <p class="empty-state">You have no active bookings.</p>
+  } @else {
+    <div class="event-grid">
+      @for (book of bookings(); track book.idInscription) {
+        <article class="event-card">
+          <div class="event-card-top">
+            <span class="category">Booking #{{ book.idInscription }}</span>
+            <span class="status" [class.cancelled]="book.statut === 'ANNULEE'">
+              {{ book.statut }}
+            </span>
+          </div>
+          <h3>Site #{{ book.siteId }}</h3>
+          <dl class="event-facts">
+            <div>
+              <dt>From</dt>
+              <dd>{{ book.dateDebut }}</dd>
+            </div>
+            <div>
+              <dt>To</dt>
+              <dd>{{ book.dateFin }}</dd>
+            </div>
+            <div>
+              <dt>Guests</dt>
+              <dd>{{ book.numberOfGuests }}</dd>
+            </div>
+          </dl>
+          <a class="button button-primary card-action" [routerLink]="['/campings', book.siteId]">
+            View Site
+          </a>
+        </article>
+      }
+    </div>
+  }
+</section>
