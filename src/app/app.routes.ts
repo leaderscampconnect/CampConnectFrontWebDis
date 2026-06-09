@@ -3,6 +3,26 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
+    path: 'campings',
+    loadComponent: () =>
+      import('./camping/camping-list/camping-list.component').then(m => m.CampingListComponent)
+  },
+  {
+    path: 'campings/new',
+    loadComponent: () =>
+      import('./camping/camping-add/camping-add.component').then(m => m.CampingAddComponent)
+  },
+  {
+    path: 'campings/:id',
+    loadComponent: () =>
+      import('./camping/camping-detail/camping-detail.component').then(m => m.CampingDetailComponent)
+  },
+  {
+    path: 'my-bookings',
+    loadComponent: () =>
+      import('./bookings/my-bookings/my-bookings.component').then(m => m.MyBookingsComponent)
+  },
+  {
     path: 'login',
     loadComponent: () =>
       import('./auth/login/login.component').then(m => m.LoginComponent)

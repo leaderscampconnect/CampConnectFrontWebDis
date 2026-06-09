@@ -4,6 +4,7 @@ import Keycloak, { KeycloakTokenParsed } from 'keycloak-js';
 interface CampConnectToken extends KeycloakTokenParsed {
   preferred_username?: string;
   name?: string;
+  sub?: string;
   realm_access?: {
     roles: string[];
   };
@@ -13,6 +14,7 @@ interface CampConnectToken extends KeycloakTokenParsed {
 export class AuthService {
   private readonly keycloak = new Keycloak({
     url: `${window.location.protocol}//${window.location.hostname}:8180`,
+    //url: `${window.location.protocol}//${window.location.hostname}:8080`,
     realm: 'campconnect',
     clientId: 'campconnect-web'
   });
