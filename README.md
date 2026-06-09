@@ -1,20 +1,20 @@
 # CampConnect Angular Frontend
 
-Angular 19 frontend integrated with the CampConnect API Gateway and Keycloak.
-It is a browser-only application served by Nginx in the team Docker Compose
-stack.
+This is the team's Angular 19 frontend. The original interface remains owned
+by the frontend team and is intentionally preserved.
 
-## Implemented Workflows
+The repository includes non-visual integration building blocks for the Events
+and Notifications modules:
 
-- Browse published events without signing in.
-- Authenticate with the `campconnect` Keycloak realm using Authorization Code
-  Flow with PKCE.
-- Attach bearer tokens to `/api/**` requests.
-- Create events as an `ADMIN` or `ORGANIZER`.
-- Register for events or join a full event's waitlist.
-- Load persisted notifications for the signed-in Keycloak user.
-- Mark one or all notifications as read.
-- Display structured backend error messages.
+- Keycloak Authorization Code Flow with PKCE
+- bearer-token attachment for `/api/**` requests
+- typed Events and Notifications API models
+- API clients for event listing, creation, registration, and notification reads
+- local and Nginx proxying through the API Gateway
+
+These modules do not replace or redesign existing team pages. Frontend owners
+can inject the services into their own components when integrating the two
+modules.
 
 ## API Contracts
 
@@ -64,10 +64,10 @@ and development accounts are maintained in the deployment repository.
 For a cloud deployment, expose Keycloak through the same ingress and replace
 the local port-based URL with runtime configuration.
 
-## Project Structure
+## Integration Structure
 
 - `src/app/core`: Keycloak service and HTTP interceptor
 - `src/app/models`: event and notification API contracts
 - `src/app/services`: typed API clients
-- `src/app/app.component.*`: integrated dashboard and organizer form
+- `src/app/app.component.*`: root outlet for the team's routed interface
 - `nginx.conf`: production API proxy and SPA fallback

@@ -34,7 +34,7 @@ export class CampingService {
   private bookingUrl = `${environment.apiUrl}/inscriptionsite`;
 
   // --- Camping Sites ---
-  
+
   getAllCampings(): Observable<SiteCamping[]> {
     return this.http.get<SiteCamping[]>(`${this.baseUrl}/getAll`);
   }
