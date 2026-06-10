@@ -8,14 +8,24 @@
   </a>
 
   <nav>
-    <a href="/campings">Campings</a>
+    @if (auth.hasAnyRole('ADMIN')) {
+      <a routerLink="/admin/campings" routerLinkActive="active">Manage Campings</a>
+      <a routerLink="/admin/bookings" routerLinkActive="active">All Bookings</a>
+      <a routerLink="/users" routerLinkActive="active">Users</a>
+    } @else if (auth.hasAnyRole('SITE_OWNER')) {
+      <a routerLink="/owner/dashboard" routerLinkActive="active">Owner Dashboard</a>
+    } @else {
+      <a routerLink="/camper/campings" routerLinkActive="active">Explore Campings</a>
+      @if (auth.authenticated()) {
+        <a routerLink="/camper/bookings" routerLinkActive="active">My Bookings</a>
+      }
+    }
     <a href="#events">Events</a>
     @if (auth.authenticated()) {
       <a href="#notifications">Notifications</a>
-      <a href="/my-bookings">My Bookings</a>
     }
     @if (canManageEvents()) {
-      <a href="#create">Create</a>
+      <a href="#create">Create Event</a>
     }
   </nav>
 
