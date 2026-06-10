@@ -61,11 +61,11 @@
               </td>
 
               <td class="actions">
-                <a class="btn-view" [routerLink]="['/admin/campings', site.idSite]">
+                <a class="btn-view" [routerLink]="['/admin/campings', site.idSite || $any(site).id || $any(site).siteId]">
                   View
                 </a>
 
-                <a class="btn-edit" [routerLink]="['/admin/campings', site.idSite, 'edit']">
+                <a class="btn-edit" [routerLink]="['/admin/campings', site.idSite || $any(site).id || $any(site).siteId, 'edit']">
                   Edit
                 </a>
 

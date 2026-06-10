@@ -49,8 +49,8 @@ export class CampingService {
     return this.http.get<SiteBooking[]>(`${this.bookingUrl}/my-inscriptions/${userId}`);
   }
 
-  getMyCampBookingList(): Observable<SiteBooking[]> {
-    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/my-camp-booking-list`);
+  getMyCampBookingList(ownerId: number): Observable<SiteBooking[]> {
+    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/my-camp-booking-list/${ownerId}`);
   }
 
   getAllBookings(): Observable<SiteBooking[]> {

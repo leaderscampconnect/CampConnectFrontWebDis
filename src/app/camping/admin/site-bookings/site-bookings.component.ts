@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CampingService } from '../../../services/camping.service';;
 import { SiteBooking } from '../../../models/camping-models';
-import { CampingNavbarComponent } from '../camping-sites/camping-navbar/camping-navbar.component';;
+import { CampingNavbarComponent } from '../camping-sites/camping-navbar/camping-navbar.component';
+import { AuthService } from '../../../core/auth.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-site-bookings',
@@ -20,48 +22,63 @@ export class SiteBookingsComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private campingService: CampingService) {}
+  constructor(
+    private campingService: CampingService,
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.loadBookings();
   }
 
-  
-getUserRole(): string | null {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.role || payload.authorities?.[0]?.replace('ROLE_', '');
-  } catch {
-    return null;
-  }
-}
-
 loadBookings(): void {
-  const role = this.getUserRole();
-
-  if (role === 'GUIDE') {
-    this.campingService.getMyCampBookingList().subscribe({
-      next: (data) => {
-        this.bookings = data;
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
-  } else {
+  // Only ADMIN should ever call getAllBookings
+  if (this.authService.hasAnyRole('ADMIN')) {
     this.campingService.getAllBookings().subscribe({
       next: (data) => {
         this.bookings = data;
       },
       error: (error) => {
-        console.error(error);
+        console.error('Failed to fetch all bookings:', error);
       }
     });
+  } 
+  // SITE_OWNER or GUIDE should see their own camp bookings
+  else if (this.authService.hasAnyRole('SITE_OWNER', 'GUIDE')) {
+    const email = this.authService.email();
+    if (email) {
+      this.userService.getUserByEmail(email).subscribe({
+        next: (user) => {
+          if (user.id) {
+            this.campingService.getMyCampBookingList(user.id).subscribe({
+              next: (data) => {
+                this.bookings = data;
+              },
+              error: (error) => {
+                console.error('Failed to fetch my camp bookings:', error);
+              }
+            });
+          } else {
+            console.error('User ID missing from internal database.');
+          }
+        },
+        error: (error) => console.error('Failed to fetch user:', error)
+      });
+    } else {
+      console.error("Owner email missing from token");
+    }
+  } 
+  // Fallback for anyone else navigating here
+  else {
+    console.error("User does not have permission to view this bookings list. Current roles:", this.authService.roles());
   }
 }
+
+isGuide(): boolean {
+  return this.authService.hasAnyRole('GUIDE');
+}
+
 isCancelable(booking: any): boolean {
   return booking.statut === 'EN_ATTENTE';
 }

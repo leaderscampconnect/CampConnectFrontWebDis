@@ -5,7 +5,7 @@
 
     <div class="page-header">
       <h2>
-  {{ getUserRole() === 'GUIDE' ? 'My Camp Bookings' : 'Bookings Management' }}
+  {{ isGuide() ? 'My Camp Bookings' : 'Bookings Management' }}
 </h2>
       <p>Monitor and manage all camping reservations.</p>
     </div>
