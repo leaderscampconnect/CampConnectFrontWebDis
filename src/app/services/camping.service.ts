@@ -1,29 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { CampingSite, CampingSiteCreatePayload, SiteAvailability, SiteBooking } from '../models/camping-models';
 
-export interface SiteCamping {
-  idSite?: number;
-  nom: string;
-  localisation: string;
-  capacite: number;
-  prixParNuit: number;
-  imageUrl?: string;
-  description: string;
-  statutDispo: 'DISPONIBLE' | 'FERME' | 'COMPLET';
-  ownerId?: string;
-}
-
-export interface InscriptionSite {
-  idInscription?: number;
-  dateDebut: string;
-  dateFin: string;
-  numberOfGuests: number;
-  statut?: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE';
-  siteId: number;
-  utilisateurId?: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -34,30 +14,72 @@ export class CampingService {
   private bookingUrl = `${environment.apiUrl}/inscriptionsite`;
 
   // --- Camping Sites ---
-
-  getAllCampings(): Observable<SiteCamping[]> {
-    return this.http.get<SiteCamping[]>(`${this.baseUrl}/getAll`);
+  
+  getAllCampingSites(): Observable<CampingSite[]> {
+    return this.http.get<CampingSite[]>(`${this.baseUrl}/getAll`);
   }
 
-  getCampingById(id: number): Observable<SiteCamping> {
-    return this.http.get<SiteCamping>(`${this.baseUrl}/getsite/${id}`);
+  getCampingSiteById(id: number): Observable<CampingSite> {
+    return this.http.get<CampingSite>(`${this.baseUrl}/getsite/${id}`);
   }
 
-  addCamping(site: SiteCamping): Observable<SiteCamping> {
-    return this.http.post<SiteCamping>(`${this.baseUrl}/addSite`, site);
+  addCampingSite(site: CampingSiteCreatePayload | FormData): Observable<CampingSite> {
+    return this.http.post<CampingSite>(`${this.baseUrl}/addSite`, site);
   }
 
-  getMySites(): Observable<SiteCamping[]> {
-    return this.http.get<SiteCamping[]>(`${this.baseUrl}/my-sites`);
+  updateCampingSite(id: number, site: CampingSiteCreatePayload | FormData): Observable<CampingSite> {
+    return this.http.patch<CampingSite>(`${this.baseUrl}/updateSite/${id}`, site);
+  }
+
+  closeCampingSite(id: number): Observable<CampingSite> {
+    return this.http.patch<CampingSite>(`${this.baseUrl}/close/${id}`, {});
+  }
+
+  getMyCampingSites(ownerId: number): Observable<CampingSite[]> {
+    return this.http.get<CampingSite[]>(`${this.baseUrl}/my-sites?ownerId=${ownerId}`);
   }
 
   // --- Bookings ---
 
-  bookCamping(booking: Partial<InscriptionSite>): Observable<InscriptionSite> {
-    return this.http.post<InscriptionSite>(`${this.bookingUrl}/add`, booking);
+  createBooking(booking: Partial<SiteBooking>): Observable<SiteBooking> {
+    return this.http.post<SiteBooking>(`${this.bookingUrl}/add`, booking);
   }
 
-  getMyBookings(userId: string): Observable<InscriptionSite[]> {
-    return this.http.get<InscriptionSite[]>(`${this.bookingUrl}/my-inscriptions/${userId}`);
+  getMyBookings(userId: number): Observable<SiteBooking[]> {
+    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/my-inscriptions/${userId}`);
+  }
+
+  getMyCampBookingList(): Observable<SiteBooking[]> {
+    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/my-camp-booking-list`);
+  }
+
+  getAllBookings(): Observable<SiteBooking[]> {
+    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/getAll`);
+  }
+
+  getDetailedBookingsBySite(siteId: number): Observable<SiteBooking[]> {
+    return this.http.get<SiteBooking[]>(`${this.bookingUrl}/bySite/${siteId}`);
+  }
+
+  cancelBooking(id: number): Observable<SiteBooking> {
+    return this.http.patch<SiteBooking>(`${this.bookingUrl}/cancel/${id}`, {});
+  }
+
+  confirmPayment(id: number): Observable<SiteBooking> {
+    return this.http.patch<SiteBooking>(`${this.bookingUrl}/confirm-payment/${id}`, {});
+  }
+
+  getSiteAvailability(siteId: number, startDate: string, endDate: string): Observable<SiteAvailability> {
+    return this.http.get<SiteAvailability>(`${this.baseUrl}/${siteId}/availability?dateDebut=${startDate}&dateFin=${endDate}`);
+  }
+
+  downloadInvoice(bookingId: number): Observable<Blob> {
+    // Stub implementation: requires actual backend PDF generation
+    return this.http.get(`${this.bookingUrl}/invoice/${bookingId}`, { responseType: 'blob' });
+  }
+
+  downloadTicket(bookingId: number): Observable<Blob> {
+    // Stub implementation: requires actual backend PDF generation
+    return this.http.get(`${this.bookingUrl}/ticket/${bookingId}`, { responseType: 'blob' });
   }
 }

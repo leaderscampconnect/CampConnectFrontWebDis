@@ -1,0 +1,96 @@
+<section class="sites-page">
+  <div class="container">
+    <div class="section-header">
+      <h2>Camping Sites</h2>
+      <p>Explore the available camping sites and choose your next destination.</p>
+    </div>
+
+    <div class="filters" *ngIf="!isLoading && !errorMessage">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+        placeholder="Search by site name or location..."
+      />
+    </div>
+
+    <div *ngIf="isLoading" class="info-message">
+      Loading camping sites...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="sites-grid" *ngIf="!isLoading && !errorMessage && paginatedSites.length > 0">
+      <div class="site-card" *ngFor="let site of paginatedSites">
+        <img
+          [src]="site.imageUrl || 'assets/images/default-camp.jpg'"
+          [alt]="site.nom"
+        />
+
+        <div class="site-card-content">
+          <span
+            class="status"
+            [ngClass]="{
+              'DISPONIBLE': site.statutDispo === 'DISPONIBLE',
+              'COMPLET': site.statutDispo === 'COMPLET'
+            }"
+          >
+            {{ site.statutDispo }}
+          </span>
+
+          <h3>{{ site.nom }}</h3>
+          <p class="location">{{ site.localisation }}</p>
+          <p class="description">
+            {{ site.description || 'A beautiful camping destination for your next trip.' }}
+          </p>
+
+          <div class="site-info">
+            <div class="info-row">
+              <span class="info-label">Capacity:</span>
+              <span class="info-value">{{ site.capacite }}</span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Price:</span>
+              <span class="info-value">{{ site.prixParNuit }} DT / night</span>
+            </div>
+          </div>
+
+      <div class="site-actions">
+        <a
+            class="btn-primary"
+            routerLink="/camper/campings/{{ site.idSite }}"
+          >
+            Book Now
+          </a>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination" *ngIf="!isLoading && !errorMessage && filteredSites.length > itemsPerPage">
+      <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+
+      <button
+        class="page-number"
+        *ngFor="let page of pageNumbers"
+        [class.active]="page === currentPage"
+        (click)="goToPage(page)"
+      >
+        {{ page }}
+      </button>
+
+      <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && filteredSites.length === 0" class="info-message">
+      No camping sites match your search.
+    </div>
+  </div>
+</section>

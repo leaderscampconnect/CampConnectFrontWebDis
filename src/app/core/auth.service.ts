@@ -62,6 +62,11 @@ export class AuthService {
     return token?.sub;
   }
 
+   email(): string | undefined {
+    const token = this.keycloak.tokenParsed as CampConnectToken | undefined;
+    return token?.['email'];
+  }
+  
   hasAnyRole(...expectedRoles: string[]): boolean {
     const currentRoles = this.roles();
     return expectedRoles.some(role => currentRoles.includes(role.toUpperCase()));
