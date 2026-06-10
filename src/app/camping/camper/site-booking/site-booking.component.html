@@ -1,0 +1,193 @@
+<section class="booking-page" *ngIf="!isLoading && selectedSite; else loadingOrError">
+  <div class="container">
+    <div class="booking-wrapper">
+      <div class="booking-summary">
+        <img
+          [src]="selectedSite.imageUrl || 'assets/images/default-camp.jpg'"
+          [alt]="selectedSite.nom"
+        />
+
+        <div class="summary-content">
+          <span
+            class="badge"
+            [ngClass]="{
+              'DISPONIBLE': selectedSite.statutDispo === 'DISPONIBLE',
+              'COMPLET': selectedSite.statutDispo === 'COMPLET',
+              'FERME': selectedSite.statutDispo === 'FERME'
+            }"
+          >
+            {{ selectedSite.statutDispo }}
+          </span>
+
+          <h2>{{ selectedSite.nom }}</h2>
+          <p class="location">{{ selectedSite.localisation }}</p>
+
+          <div class="summary-info">
+            <p><strong>Capacity:</strong> {{ selectedSite.capacite }} guests</p>
+            <p><strong>Price:</strong> {{ selectedSite.prixParNuit }} DT / night / guest</p>
+          </div>
+
+          <p class="summary-text">
+            {{ selectedSite.description || 'Complete your booking details to reserve this camping site.' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="booking-form-card">
+        <div class="form-header">
+          <span class="section-subtitle">Reservation</span>
+          <h2>Book This Site</h2>
+          <p>Fill in the form below to submit your booking request.</p>
+        </div>
+
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <form class="booking-form" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+<div class="form-group">
+  <label for="dateDebut">Start Date</label>
+  <input
+    id="dateDebut"
+    type="date"
+    name="dateDebut"
+    [(ngModel)]="bookingForm.dateDebut"
+    (ngModelChange)="onBookingFieldChange()"
+    [min]="todayString"
+    required
+  />
+</div>
+
+<div class="form-group">
+  <label for="dateFin">End Date</label>
+  <input
+    id="dateFin"
+    type="date"
+    name="dateFin"
+    [(ngModel)]="bookingForm.dateFin"
+    (ngModelChange)="onBookingFieldChange()"
+    [min]="bookingForm.dateDebut || todayString"
+    required
+  />
+</div>
+          </div>
+
+        <div class="form-group">
+        <label for="numberOfGuests">Number of Guests</label>
+        <input
+          id="numberOfGuests"
+          type="number"
+          name="numberOfGuests"
+          [(ngModel)]="bookingForm.numberOfGuests"
+          (ngModelChange)="onBookingFieldChange()"
+          min="1"
+          [max]="getRemainingCapacity() || 1"
+          required
+        />
+      <small class="helper-text">
+        <ng-container *ngIf="availability; else selectDatesHint">
+          Maximum allowed for selected dates: {{ availability.remainingCapacity }} guest(s)
+        </ng-container>
+        <ng-template #selectDatesHint>
+          Select start and end dates to check availability.
+        </ng-template>
+      </small>
+      </div>
+
+          <div class="form-group">
+            <label for="siteName">Selected Camping Site</label>
+            <input
+              id="siteName"
+              type="text"
+              [value]="selectedSite.nom"
+              disabled
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="siteLocation">Location</label>
+            <input
+              id="siteLocation"
+              type="text"
+              [value]="selectedSite.localisation"
+              disabled
+            />
+          </div>
+
+          <div class="booking-total-card">
+            <div class="total-row">
+              <span>Price per night</span>
+              <strong>{{ selectedSite.prixParNuit }} DT</strong>
+            </div>
+
+            <div class="total-row">
+              <span>Guests</span>
+              <strong>{{ bookingForm.numberOfGuests }}</strong>
+            </div>
+
+            <div class="total-row">
+              <span>Nights</span>
+              <strong>{{ getNumberOfNights() }}</strong>
+            </div>
+
+            <div class="total-row total-final">
+              <span>Total</span>
+              <strong>{{ getTotalPrice() }} DT</strong>
+            </div>
+          </div>
+
+          <div *ngIf="availabilityLoading" class="info-message">
+            Checking availability for selected dates...
+          </div>
+
+          <div *ngIf="availability && !availabilityLoading" class="success-message">
+            Available for selected dates: {{ availability.remainingCapacity }} guest(s)
+          </div>
+
+          <div *ngIf="availability && availability.remainingCapacity === 0" class="error-message">
+  This camping site is fully booked for the selected dates.
+            </div>
+
+            <button
+              type="submit"
+              class="btn-submit"
+              [disabled]="!availability || availability.remainingCapacity === 0"
+            >
+              {{ !availability ? 'Select Dates First' : (availability.remainingCapacity === 0 ? 'Fully Booked' : 'Confirm Booking') }}
+            </button>
+        </form>
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #loadingOrError>
+  <section class="booking-page">
+    <div class="container">
+      <div class="booking-form-card">
+        <div *ngIf="isLoading" class="info-message">
+          Loading camping site...
+        </div>
+
+        <div *ngIf="!isLoading && errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="!isLoading && !errorMessage" class="error-message">
+          Camping site not found.
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-template>

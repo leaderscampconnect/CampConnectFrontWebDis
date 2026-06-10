@@ -1,0 +1,189 @@
+/* Container & Base Layout */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px; /* Slashed down from 60px */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #faf9f6;
+}
+
+/* Tightened Header Configuration */
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #7a7924;
+  margin-bottom: 4px;
+}
+
+.section-heading h2 {
+  font-size: 22px; /* Scaled down from 32px */
+  color: #172b44;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Base Utility Button Architecture */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px; /* Crisp borders instead of huge 12px corners */
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.button-quiet {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.button-quiet:hover {
+  background: #f8f6f1;
+  border-color: #94a3b8;
+}
+
+.button-primary {
+  background: #96952f;
+  color: #ffffff;
+  border: 1px solid #96952f;
+}
+
+.button-primary:hover {
+  background: #172b44;
+  border-color: #172b44;
+}
+
+.card-action {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Highly Compact Micro Grid */
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Fits more cards per horizontal row */
+  gap: 16px;
+}
+
+/* Streamlined Cards */
+.event-card {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e8e1d7;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(23, 43, 68, 0.01);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(23, 43, 68, 0.04);
+}
+
+.event-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.category {
+  font-size: 11px;
+  color: #667281;
+  font-weight: 600;
+}
+
+/* Micro Badges */
+.status {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e6f6ec;
+  color: #15803d;
+}
+
+.status.cancelled {
+  background: #fdf2f2;
+  color: #b91c1c;
+}
+
+.event-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #172b44;
+}
+
+/* Fixed broken Definition List alignment (.event-facts) */
+.event-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 0 0 14px 0;
+  background: #fbfaf8;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #f1ede6;
+}
+
+.event-facts div {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-facts dt {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: #667281;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.event-facts dd {
+  font-size: 12px;
+  color: #172b44;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* System Notifications */
+.feedback.error {
+  padding: 10px 14px;
+  background: #fdf2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.empty-state {
+  padding: 32px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e8e1d7;
+  border-radius: 8px;
+  color: #667281;
+  font-size: 13px;
+  margin: 0;
+}
