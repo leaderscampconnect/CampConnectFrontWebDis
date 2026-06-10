@@ -1,0 +1,180 @@
+/* Layout Wrapper */
+.summary-page {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #faf9f6;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px; /* Reduced from 1200px for a more intimate summary card */
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* Compact Core Card */
+.summary-card {
+  background: #ffffff;
+  border-radius: 12px; /* Geometric modern look over bubbly 24px */
+  width: 100%;
+  padding: 24px; /* Halved from 48px to save vertical space */
+  box-shadow: 0 4px 16px rgba(23, 43, 68, 0.03);
+  border: 1px solid #e8e1d7;
+  box-sizing: border-box;
+}
+
+/* Header Text Tightening */
+.summary-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-subtitle {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #96952f;
+  margin-bottom: 4px;
+}
+
+.summary-header h2 {
+  font-size: 22px; /* Scaled down from 36px */
+  color: #172b44;
+  margin: 0 0 4px 0;
+}
+
+.summary-header p {
+  font-size: 13px;
+  color: #667281;
+  margin: 0;
+}
+
+/* Two-Column Side-By-Side Confirmation Split */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Side: Compact Preview Image */
+.summary-image-card {
+  width: 100%;
+}
+
+.summary-image-card img {
+  width: 100%;
+  height: 220px; /* Locked height so it doesn't expand wildly */
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #f0eae1;
+  background-color: #f8f6f1;
+}
+
+/* Right Side: Details Pane */
+.summary-details-card h3 {
+  font-size: 18px;
+  color: #172b44;
+  margin: 0 0 2px 0;
+}
+
+.summary-details-card .location {
+  font-size: 13px;
+  color: #667281;
+  margin: 0 0 16px 0;
+}
+
+/* Structured Bill Line-Items */
+.bill-box {
+  background: #fbfaf8;
+  border: 1px solid #e8e1d7;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #55616e;
+}
+
+.bill-row:last-child {
+  margin-bottom: 0;
+}
+
+.bill-row strong {
+  color: #172b44;
+  font-weight: 600;
+}
+
+/* Clean Invoice Total Highlight */
+.bill-row.total {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #172b44;
+}
+
+.bill-row.total strong {
+  font-size: 16px;
+  color: #7a7924;
+  font-weight: 700;
+}
+
+/* Balanced Flat Action Buttons */
+.summary-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary-actions .btn-primary,
+.summary-actions .btn-secondary {
+  flex: 1;
+  padding: 10px 16px; /* Trimmed from bloated 18px */
+  font-size: 13px; /* Trimmed from massive 18px */
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  border: none;
+  text-align: center;
+}
+
+.btn-primary {
+  background: #96952f;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #172b44;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-secondary:hover {
+  background: #f8f6f1;
+  border-color: #94a3b8;
+  color: #172b44;
+}

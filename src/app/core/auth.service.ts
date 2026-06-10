@@ -14,7 +14,6 @@ interface CampConnectToken extends KeycloakTokenParsed {
 export class AuthService {
   private readonly keycloak = new Keycloak({
     url: `${window.location.protocol}//${window.location.hostname}:8180`,
-    //url: `${window.location.protocol}//${window.location.hostname}:8080`,
     realm: 'campconnect',
     clientId: 'campconnect-web'
   });
@@ -60,6 +59,11 @@ export class AuthService {
   userId(): string | undefined {
     const token = this.keycloak.tokenParsed as CampConnectToken | undefined;
     return token?.sub;
+  }
+
+  email(): string | undefined {
+    const token = this.keycloak.tokenParsed as CampConnectToken | undefined;
+    return token?.['email'];
   }
 
   hasAnyRole(...expectedRoles: string[]): boolean {

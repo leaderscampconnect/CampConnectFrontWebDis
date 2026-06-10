@@ -1,0 +1,282 @@
+/* Container & Wrapper Framework */
+.booking-page {
+  padding: 40px 0;
+  background-color: #fbfaf8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Two-column responsive side-by-side layout */
+.booking-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 850px) {
+  .booking-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Slimmed Down Left Column (Summary) */
+.booking-summary {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e8e1d7;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(23, 43, 68, 0.02);
+  position: sticky;
+  top: 24px;
+}
+
+.booking-summary img {
+  width: 100%;
+  height: 180px; /* Highly compact view */
+  object-fit: cover;
+  background-color: #f1ede6;
+}
+
+.summary-content {
+  padding: 20px;
+  position: relative;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.badge.DISPONIBLE { background: #e6f6ec; color: #15803d; }
+.badge.COMPLET { background: #fdf2f2; color: #b91c1c; }
+.badge.FERME { background: #f5f5f5; color: #4b5563; }
+
+.summary-content h2 {
+  font-size: 22px;
+  color: #172b44;
+  margin: 0 0 4px 0;
+}
+
+.summary-content .location {
+  font-size: 13px;
+  color: #667281;
+  margin: 0 0 16px 0;
+}
+
+/* Info Box */
+.summary-info {
+  background: #fbfaf8;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #f0eae1;
+}
+
+.summary-info p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #334155;
+}
+
+.summary-info p:last-child {
+  margin-bottom: 0;
+}
+
+.summary-info strong {
+  color: #667281;
+  font-weight: 600;
+}
+
+.summary-text {
+  font-size: 13px;
+  color: #55616e;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Right Column (Form Card) */
+.booking-form-card {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid #e8e1d7;
+  box-shadow: 0 6px 20px rgba(23, 43, 68, 0.03);
+}
+
+.form-header {
+  margin-bottom: 24px;
+}
+
+.section-subtitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #96952f;
+}
+
+.form-header h2 {
+  font-size: 22px;
+  color: #172b44;
+  margin: 4px 0;
+}
+
+.form-header p {
+  font-size: 13px;
+  color: #667281;
+  margin: 0;
+}
+
+/* Form Layout Elements */
+.booking-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .booking-form .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #172b44;
+}
+
+.form-group input {
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  color: #172b44;
+  background: #ffffff;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #96952f;
+  box-shadow: 0 0 0 3px rgba(150, 149, 47, 0.15);
+}
+
+/* Styles read-only parameters neatly */
+.form-group input:disabled {
+  background: #f8f6f1;
+  color: #667281;
+  border-color: #e8e1d7;
+  cursor: not-allowed;
+}
+
+.helper-text {
+  font-size: 11px;
+  color: #667281;
+  margin-top: 2px;
+}
+
+/* Compact Booking Invoice Card */
+.booking-total-card {
+  background: #fbfaf8;
+  border: 1px solid #e8e1d7;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #55616e;
+  margin-bottom: 8px;
+}
+
+.total-row strong {
+  color: #172b44;
+}
+
+.total-final {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 16px;
+  font-weight: 700;
+  color: #172b44;
+  margin-bottom: 0;
+}
+
+.total-final strong {
+  color: #7a7924;
+  font-size: 18px;
+}
+
+/* Flat Submit Button Instead of Big Chunky One */
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #96952f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #7a7924;
+}
+
+.btn-submit:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Dynamic Notification Banners */
+.success-message, .error-message, .info-message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.success-message {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.error-message {
+  background: #fdf2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.info-message {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}

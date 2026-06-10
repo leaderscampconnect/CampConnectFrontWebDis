@@ -1,0 +1,83 @@
+<section class="admin-camping-page">
+  <div class="container">
+    <app-camping-navbar></app-camping-navbar>
+
+    <div class="content-card">
+      <div class="page-header">
+        <div>
+          <span class="section-tag">Overview</span>
+          <h3>{{ pageTitle }}</h3>
+          <p>{{ pageDescription }}</p>
+        </div>
+
+        <a *ngIf="isGuide()" class="btn-primary" routerLink="/admin/campings/new">
+          + Add New Site
+        </a>
+      </div>
+
+      <div *ngIf="isLoading" class="state-message">
+        Loading camping sites...
+      </div>
+
+      <div *ngIf="errorMessage" class="state-message error">
+        {{ errorMessage }}
+      </div>
+
+      <div class="table-wrapper" *ngIf="!isLoading && sites.length > 0">
+        <table class="sites-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Capacity</th>
+              <th>Price / Night</th>
+              <th>Status</th>
+              <th *ngIf="userRole === 'ADMINISTRATEUR'">Owner</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let site of sites">
+              <td class="site-name">{{ site.nom }}</td>
+              <td>{{ site.localisation }}</td>
+              <td>{{ site.capacite }}</td>
+              <td>{{ site.prixParNuit }} DT</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="{
+                    'DISPONIBLE': site.statutDispo === 'DISPONIBLE',
+                    'COMPLET': site.statutDispo === 'COMPLET',
+                    'FERME': site.statutDispo === 'FERME'
+                  }"
+                >
+                  {{ site.statutDispo }}
+                </span>
+              </td>
+
+              <td *ngIf="userRole === 'ADMINISTRATEUR'">
+                {{ site.ownerId || '—' }}
+              </td>
+
+              <td class="actions">
+                <a class="btn-view" [routerLink]="['/admin/campings', site.idSite]">
+                  View
+                </a>
+
+                <a class="btn-edit" [routerLink]="['/admin/campings', site.idSite, 'edit']">
+                  Edit
+                </a>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="!isLoading && sites.length === 0" class="state-message empty">
+        No camping sites found.
+      </div>
+    </div>
+  </div>
+</section>
