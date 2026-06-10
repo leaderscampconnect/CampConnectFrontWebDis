@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampingNavbarComponent } from './camping-navbar.component';;
 
-describe('CampingNavbarComponent', () => {
-  let component: CampingNavbarComponent;
-  let fixture: ComponentFixture<CampingNavbarComponent>;
+import { CampingSitesComponent } from './camping-sites.component';
+
+describe('CampingSitesComponent', () => {
+  let component: CampingSitesComponent;
+  let fixture: ComponentFixture<CampingSitesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CampingNavbarComponent]
+      imports: [CampingSitesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CampingNavbarComponent);
+    fixture = TestBed.createComponent(CampingSitesComponent);
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
