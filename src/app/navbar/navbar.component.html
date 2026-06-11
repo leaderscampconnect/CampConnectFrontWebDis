@@ -18,16 +18,16 @@
           <a routerLink="/camper/bookings" routerLinkActive="active">My Bookings</a>
         }
       }
-      <a href="#events">Events</a>
+      <a routerLink="/events" routerLinkActive="active">Events</a>
       @if (auth.authenticated()) {
-        <a href="#notifications">Notifications</a>
+        <a routerLink="/notifications" routerLinkActive="active">Notifications</a>
       }
     </div>
 
     <div class="auth-actions">
       @if (auth.authenticated()) {
         <div class="user-profile">
-          <div class="avatar">{{ auth.username()?.charAt(0)?.toUpperCase() || 'U' }}</div>
+          <div class="avatar">{{ auth.username().charAt(0).toUpperCase() || 'U' }}</div>
           <span class="identity">{{ auth.username() }}</span>
         </div>
         <button class="btn btn-logout" type="button" (click)="auth.logout()">Sign out</button>
