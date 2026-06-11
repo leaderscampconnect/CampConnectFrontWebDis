@@ -1,0 +1,39 @@
+<nav class="main-navbar">
+  <div class="nav-container">
+    <div class="nav-brand" routerLink="/">
+      <span class="brand-icon">⛺</span>
+      <span class="brand-name">CampLife</span>
+    </div>
+
+    <div class="nav-links">
+      @if (auth.hasAnyRole('ADMIN')) {
+        <a routerLink="/admin/campings" routerLinkActive="active">Manage Campings</a>
+        <a routerLink="/admin/bookings" routerLinkActive="active">All Bookings</a>
+        <a routerLink="/users" routerLinkActive="active">Users</a>
+      } @else if (auth.hasAnyRole('SITE_OWNER')) {
+        <a routerLink="/owner/dashboard" routerLinkActive="active">Owner Dashboard</a>
+      } @else {
+        <a routerLink="/camper/campings" routerLinkActive="active">Explore Campings</a>
+        @if (auth.authenticated()) {
+          <a routerLink="/camper/bookings" routerLinkActive="active">My Bookings</a>
+        }
+      }
+      <a href="#events">Events</a>
+      @if (auth.authenticated()) {
+        <a href="#notifications">Notifications</a>
+      }
+    </div>
+
+    <div class="auth-actions">
+      @if (auth.authenticated()) {
+        <div class="user-profile">
+          <div class="avatar">{{ auth.username()?.charAt(0)?.toUpperCase() || 'U' }}</div>
+          <span class="identity">{{ auth.username() }}</span>
+        </div>
+        <button class="btn btn-logout" type="button" (click)="auth.logout()">Sign out</button>
+      } @else {
+        <button class="btn btn-login" type="button" (click)="auth.login()">Sign in</button>
+      }
+    </div>
+  </div>
+</nav>

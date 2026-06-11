@@ -10,8 +10,13 @@ export const routes: Routes = [
       const auth = inject(AuthService);
       if (auth.hasAnyRole('ADMIN')) return '/admin/campings';
       if (auth.hasAnyRole('SITE_OWNER')) return '/owner/dashboard';
-      return '/camper/campings';
+      if (auth.hasAnyRole('CAMPER')) return '/camper/campings';
+      return '/home';
     }
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./home/home.component').then(m => m.HomeComponent)
   },
   {
     path: 'login',
