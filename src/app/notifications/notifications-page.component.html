@@ -1,0 +1,74 @@
+<main class="feature-page">
+  <header class="feature-header">
+    <div>
+      <a class="brand" routerLink="/">CampConnect</a>
+      <p class="eyebrow">Notification service</p>
+      <h1>Your notifications</h1>
+      <p>Registration and event lifecycle updates persisted by the Node.js and MongoDB service.</p>
+    </div>
+    <nav aria-label="Feature navigation">
+      <a routerLink="/">Camping</a>
+      <a routerLink="/events">Events</a>
+      <a routerLink="/notifications" class="active">Notifications</a>
+    </nav>
+  </header>
+
+  @if (!auth.authenticated()) {
+    <section class="auth-required">
+      <h2>Sign in to view notifications</h2>
+      <p>Notifications are private and loaded for the user ID contained in your Keycloak token.</p>
+      <button class="button button-primary" type="button" (click)="auth.login()">Sign in</button>
+    </section>
+  } @else {
+    <section class="notification-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Personal inbox</p>
+          <h2>{{ unreadCount() }} unread</h2>
+        </div>
+        <div class="actions">
+          <button class="button button-secondary" type="button" (click)="loadNotifications()">
+            Refresh
+          </button>
+          <button
+            class="button button-primary"
+            type="button"
+            [disabled]="unreadCount() === 0"
+            (click)="markAllAsRead()">
+            Mark all read
+          </button>
+        </div>
+      </div>
+
+      @if (error()) {
+        <div class="feedback error" role="alert">{{ error() }}</div>
+      }
+
+      @if (loading()) {
+        <p class="empty-state">Loading notifications...</p>
+      } @else if (notifications().length === 0) {
+        <p class="empty-state">You are all caught up.</p>
+      } @else {
+        <div class="notification-list">
+          @for (notification of notifications(); track notification.id) {
+            <button
+              class="notification"
+              type="button"
+              [class.unread]="!notification.read"
+              (click)="markAsRead(notification)">
+              <span class="notification-dot"></span>
+              <span class="notification-copy">
+                <span class="notification-topline">
+                  <strong>{{ notification.title }}</strong>
+                  <small>{{ notification.type.replace('_', ' ') }}</small>
+                </span>
+                <span>{{ notification.message }}</span>
+                <time>{{ notification.createdAt | date:'medium' }}</time>
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </section>
+  }
+</main>

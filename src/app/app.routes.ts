@@ -36,6 +36,18 @@ export const routes: Routes = [
         .then(m => m.ResetPasswordComponent)
   },
   {
+    path: 'events',
+    loadComponent: () =>
+      import('./events/events-page.component')
+        .then(m => m.EventsPageComponent)
+  },
+  {
+    path: 'notifications',
+    loadComponent: () =>
+      import('./notifications/notifications-page.component')
+        .then(m => m.NotificationsPageComponent)
+  },
+  {
     path: 'users',
     loadComponent: () =>
       import('./users/user-list/user-list.component')

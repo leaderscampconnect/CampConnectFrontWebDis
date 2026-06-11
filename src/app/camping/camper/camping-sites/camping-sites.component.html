@@ -1,8 +1,14 @@
 <section class="sites-page">
   <div class="container">
     <div class="section-header">
-      <h2>Camping Sites</h2>
-      <p>Explore the available camping sites and choose your next destination.</p>
+      <div>
+        <h2>Camping Sites</h2>
+        <p>Explore the available camping sites and choose your next destination.</p>
+      </div>
+      <nav class="module-links" aria-label="CampConnect modules">
+        <a routerLink="/events">Events</a>
+        <a routerLink="/notifications">Notifications</a>
+      </nav>
     </div>
 
     <div class="filters" *ngIf="!isLoading && !errorMessage">

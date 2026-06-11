@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SiteBookingComponent } from './site-booking.component';
+import { CampingSiteEditComponent } from './camping-site-edit.component';
 
-describe('SiteBookingComponent', () => {
-  let component: SiteBookingComponent;
-  let fixture: ComponentFixture<SiteBookingComponent>;
+describe('CampingSiteEditComponent', () => {
+  let component: CampingSiteEditComponent;
+  let fixture: ComponentFixture<CampingSiteEditComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SiteBookingComponent]
+      imports: [CampingSiteEditComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SiteBookingComponent);
+    fixture = TestBed.createComponent(CampingSiteEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

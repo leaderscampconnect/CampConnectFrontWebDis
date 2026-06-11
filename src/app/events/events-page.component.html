@@ -1,0 +1,144 @@
+<main class="feature-page">
+  <header class="feature-header">
+    <div>
+      <a class="brand" routerLink="/">CampConnect</a>
+      <p class="eyebrow">Event service</p>
+      <h1>Events and activities</h1>
+      <p>Browse published events, reserve a place, or manage an event as an organizer.</p>
+    </div>
+    <nav aria-label="Feature navigation">
+      <a routerLink="/">Camping</a>
+      <a routerLink="/events" class="active">Events</a>
+      <a routerLink="/notifications">Notifications</a>
+    </nav>
+  </header>
+
+  @if (message()) {
+    <div class="feedback success" role="status">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="feedback error" role="alert">{{ error() }}</div>
+  }
+
+  <section class="content-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Published events</p>
+        <h2>Upcoming experiences</h2>
+      </div>
+      <button class="button button-secondary" type="button" (click)="loadEvents()">Refresh</button>
+    </div>
+
+    @if (loading()) {
+      <p class="empty-state">Loading events...</p>
+    } @else if (events().length === 0) {
+      <p class="empty-state">No published events are available.</p>
+    } @else {
+      <div class="event-grid">
+        @for (event of events(); track event.id) {
+          <article class="event-card">
+            <div class="card-top">
+              <span class="category">{{ event.category.replace('_', ' ') }}</span>
+              <span class="status" [class.cancelled]="event.status === 'CANCELLED'">
+                {{ event.status }}
+              </span>
+            </div>
+            <h3>{{ event.title }}</h3>
+            <p class="description">{{ event.description }}</p>
+            <dl>
+              <div>
+                <dt>When</dt>
+                <dd>{{ event.startAt | date:'medium' }}</dd>
+              </div>
+              <div>
+                <dt>Where</dt>
+                <dd>{{ event.location }}</dd>
+              </div>
+              <div>
+                <dt>Seats</dt>
+                <dd>{{ event.availableSeats }} / {{ event.capacity }} available</dd>
+              </div>
+              <div>
+                <dt>Price</dt>
+                <dd>{{ event.price | currency:'TND':'symbol':'1.0-2' }}</dd>
+              </div>
+            </dl>
+            <button
+              class="button button-primary"
+              type="button"
+              [disabled]="event.status === 'CANCELLED' || isRegistered(event)"
+              (click)="register(event)">
+              @if (isRegistered(event)) {
+                Already registered
+              } @else {
+                {{ event.fullyBooked ? 'Join waitlist' : 'Reserve a place' }}
+              }
+            </button>
+          </article>
+        }
+      </div>
+    }
+  </section>
+
+  @if (canManageEvents()) {
+    <section class="content-section create-section">
+      <div>
+        <p class="eyebrow">Organizer workspace</p>
+        <h2>Create an event</h2>
+        <p class="supporting-copy">
+          The form is validated in Angular and again by the Spring Boot event-service DTO.
+        </p>
+      </div>
+
+      <form [formGroup]="eventForm" (ngSubmit)="createEvent()">
+        <label>
+          Title
+          <input formControlName="title" placeholder="Sunset ridge hike">
+        </label>
+        <label>
+          Category
+          <select formControlName="category">
+            @for (category of categories; track category) {
+              <option [value]="category">{{ category.replace('_', ' ') }}</option>
+            }
+          </select>
+        </label>
+        <label class="full-width">
+          Description
+          <textarea formControlName="description" rows="4"></textarea>
+        </label>
+        <label>
+          Starts
+          <input type="datetime-local" formControlName="startAt">
+        </label>
+        <label>
+          Ends
+          <input type="datetime-local" formControlName="endAt">
+        </label>
+        <label class="full-width">
+          Location
+          <input formControlName="location" placeholder="Ain Draham">
+        </label>
+        <label>
+          Capacity
+          <input type="number" formControlName="capacity" min="1">
+        </label>
+        <label>
+          Waitlist capacity
+          <input type="number" formControlName="waitlistCapacity" min="0">
+        </label>
+        <label>
+          Price (TND)
+          <input type="number" formControlName="price" min="0" step="0.1">
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" formControlName="published">
+          Publish immediately
+        </label>
+        <button class="button button-primary full-width" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Creating...' : 'Create event' }}
+        </button>
+      </form>
+    </section>
+  }
+</main>
