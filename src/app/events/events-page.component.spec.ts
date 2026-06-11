@@ -26,6 +26,9 @@ describe('EventsPageComponent', () => {
           provide: EventApiService,
           useValue: {
             getEvents: () => of([]),
+            getUpcoming: () => of([]),
+            getAvailable: () => of([]),
+            search: () => of([]),
             createEvent: () => of({}),
             register: () => of({})
           }

@@ -4,7 +4,7 @@
       <a class="brand" routerLink="/">CampConnect</a>
       <p class="eyebrow">Event service</p>
       <h1>Events and activities</h1>
-      <p>Browse published events, reserve a place, or manage an event as an organizer.</p>
+      <p>Full event discovery, registration, availability, and lifecycle management.</p>
     </div>
     <nav aria-label="Feature navigation">
       <a routerLink="/">Camping</a>
@@ -23,16 +23,75 @@
   <section class="content-section">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Published events</p>
-        <h2>Upcoming experiences</h2>
+        <p class="eyebrow">GET endpoints</p>
+        <h2>Find events</h2>
       </div>
-      <button class="button button-secondary" type="button" (click)="loadEvents()">Refresh</button>
+      @if (canManageEvents()) {
+        <div class="actions">
+          <button class="button button-secondary" type="button" (click)="loadEventNotifications()">
+            Event notifications
+          </button>
+          <button class="button button-secondary" type="button" (click)="loadCombinedView()">
+            Feign combined view
+          </button>
+        </div>
+      }
     </div>
+
+    <form class="filter-form" [formGroup]="filterForm" (ngSubmit)="loadEvents()">
+      <label>
+        View
+        <select formControlName="view">
+          <option value="all">List and filter</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="available">Available</option>
+          <option value="search">Search</option>
+        </select>
+      </label>
+      <label>
+        Keyword
+        <input formControlName="keyword" placeholder="Title, description, location">
+      </label>
+      <label>
+        Category
+        <select formControlName="category">
+          <option value="">Any category</option>
+          @for (category of categories; track category) {
+            <option [value]="category">{{ category.replace('_', ' ') }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Status
+        <select formControlName="status">
+          <option value="">Any status</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </label>
+      <label>
+        Location
+        <input formControlName="location" placeholder="Tunis">
+      </label>
+      <label>
+        Published
+        <select formControlName="published">
+          <option value="">All</option>
+          <option value="true">Published</option>
+          <option value="false">Unpublished</option>
+        </select>
+      </label>
+      <div class="form-actions full-width">
+        <button class="button button-primary" type="submit">Load events</button>
+        <button class="button button-secondary" type="button" (click)="resetFilters()">Reset</button>
+      </div>
+    </form>
 
     @if (loading()) {
       <p class="empty-state">Loading events...</p>
     } @else if (events().length === 0) {
-      <p class="empty-state">No published events are available.</p>
+      <p class="empty-state">No events match this request.</p>
     } @else {
       <div class="event-grid">
         @for (event of events(); track event.id) {
@@ -46,55 +105,140 @@
             <h3>{{ event.title }}</h3>
             <p class="description">{{ event.description }}</p>
             <dl>
-              <div>
-                <dt>When</dt>
-                <dd>{{ event.startAt | date:'medium' }}</dd>
-              </div>
-              <div>
-                <dt>Where</dt>
-                <dd>{{ event.location }}</dd>
-              </div>
-              <div>
-                <dt>Seats</dt>
-                <dd>{{ event.availableSeats }} / {{ event.capacity }} available</dd>
-              </div>
-              <div>
-                <dt>Price</dt>
-                <dd>{{ event.price | currency:'TND':'symbol':'1.0-2' }}</dd>
-              </div>
+              <div><dt>When</dt><dd>{{ event.startAt | date:'medium' }}</dd></div>
+              <div><dt>Where</dt><dd>{{ event.location }}</dd></div>
+              <div><dt>Seats</dt><dd>{{ event.availableSeats }} / {{ event.capacity }}</dd></div>
+              <div><dt>Waitlist</dt><dd>{{ event.waitlistCount }} / {{ event.waitlistCapacity }}</dd></div>
             </dl>
-            <button
-              class="button button-primary"
-              type="button"
-              [disabled]="event.status === 'CANCELLED' || isRegistered(event)"
-              (click)="register(event)">
-              @if (isRegistered(event)) {
-                Already registered
-              } @else {
-                {{ event.fullyBooked ? 'Join waitlist' : 'Reserve a place' }}
+            <div class="card-actions">
+              <button class="button button-secondary" type="button" (click)="inspectEvent(event)">
+                Details & availability
+              </button>
+              @if (canManageEvents()) {
+                <button class="button button-secondary" type="button" (click)="editEvent(event)">Edit</button>
+                @if (event.status === 'DRAFT') {
+                  <button class="button button-primary" type="button" (click)="publish(event)">Publish</button>
+                }
+                @if (event.status === 'SCHEDULED' && event.registeredCount === 0) {
+                  <button class="button button-secondary" type="button" (click)="unpublish(event)">Unpublish</button>
+                }
+                @if (event.status === 'SCHEDULED' || event.status === 'POSTPONED') {
+                  <button class="button button-primary" type="button" (click)="changeStatus(event, 'ONGOING')">
+                    Start
+                  </button>
+                }
+                @if (event.status === 'ONGOING') {
+                  <button class="button button-primary" type="button" (click)="changeStatus(event, 'COMPLETED')">
+                    Complete
+                  </button>
+                }
+                <button class="button button-danger" type="button" (click)="deleteEvent(event)">Delete</button>
               }
-            </button>
+            </div>
           </article>
         }
       </div>
     }
   </section>
 
+  @if (selectedEvent(); as event) {
+    <section class="content-section detail-section">
+      <div>
+        <p class="eyebrow">GET /events/{{ event.id }}</p>
+        <h2>{{ event.title }}</h2>
+        <p class="supporting-copy">{{ event.description }}</p>
+        <div class="detail-facts">
+          <span><strong>Status:</strong> {{ event.status }}</span>
+          <span><strong>Organizer:</strong> {{ event.organizerId }}</span>
+          <span><strong>Published:</strong> {{ event.published ? 'Yes' : 'No' }}</span>
+          <span><strong>Price:</strong> {{ event.price | currency:'TND' }}</span>
+          @if (event.cancellationReason) {
+            <span><strong>Cancellation:</strong> {{ event.cancellationReason }}</span>
+          }
+        </div>
+      </div>
+
+      @if (availability(); as available) {
+        <div class="availability-card">
+          <p class="eyebrow">Availability endpoint</p>
+          <strong class="metric">{{ available.occupancyRate | number:'1.0-1' }}%</strong>
+          <span>occupancy</span>
+          <div class="detail-facts">
+            <span>{{ available.registeredCount }} registered</span>
+            <span>{{ available.availableSeats }} seats available</span>
+            <span>{{ available.waitlistCount }} waitlisted</span>
+          </div>
+        </div>
+      }
+
+      @if (canRegister()) {
+        <form class="compact-form" [formGroup]="registrationForm">
+          <h3>Registration</h3>
+          <p class="form-help">Use the numeric ID from User Service, not the Keycloak UUID.</p>
+          <label>
+            Participant ID
+            <input formControlName="participantId" inputmode="numeric" placeholder="5">
+          </label>
+          <div class="form-actions">
+            <button class="button button-primary" type="button" (click)="register(event)">Register / waitlist</button>
+            <button class="button button-secondary" type="button" (click)="cancelRegistration(event)">
+              Cancel registration
+            </button>
+          </div>
+        </form>
+      }
+
+      @if (canManageEvents()) {
+        <form class="compact-form" [formGroup]="postponeForm">
+          <h3>Postpone event</h3>
+          <label>New start <input type="datetime-local" formControlName="startAt"></label>
+          <label>New end <input type="datetime-local" formControlName="endAt"></label>
+          <button class="button button-secondary" type="button" (click)="postpone(event)">Postpone and notify</button>
+        </form>
+
+        <form class="compact-form" [formGroup]="cancellationForm">
+          <h3>Cancel event</h3>
+          <label>
+            Reason
+            <textarea formControlName="reason" rows="3"></textarea>
+          </label>
+          <button class="button button-danger" type="button" (click)="cancelEvent(event)">Cancel and notify</button>
+        </form>
+      }
+    </section>
+  }
+
+  @if (integrationNotifications().length > 0) {
+    <section class="content-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">OpenFeign integration</p>
+          <h2>Notifications returned through Event Service</h2>
+        </div>
+        <span>{{ integrationNotifications().length }} records</span>
+      </div>
+      <div class="integration-list">
+        @for (notification of integrationNotifications(); track notification.id) {
+          <article>
+            <strong>{{ notification.title }}</strong>
+            <span>{{ notification.message }}</span>
+            <small>{{ notification.type }} | recipient {{ notification.recipientId }}</small>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
   @if (canManageEvents()) {
     <section class="content-section create-section">
       <div>
-        <p class="eyebrow">Organizer workspace</p>
-        <h2>Create an event</h2>
-        <p class="supporting-copy">
-          The form is validated in Angular and again by the Spring Boot event-service DTO.
-        </p>
+        <p class="eyebrow">{{ editingEventId() ? 'PUT endpoint' : 'POST endpoint' }}</p>
+        <h2>{{ editingEventId() ? 'Update event' : 'Create event' }}</h2>
+        <p class="supporting-copy">Validation is applied in Angular and by the Event Service DTO.</p>
       </div>
 
-      <form [formGroup]="eventForm" (ngSubmit)="createEvent()">
-        <label>
-          Title
-          <input formControlName="title" placeholder="Sunset ridge hike">
-        </label>
+      <form [formGroup]="eventForm" (ngSubmit)="saveEvent()">
+        <label>Title <input formControlName="title"></label>
         <label>
           Category
           <select formControlName="category">
@@ -103,41 +247,23 @@
             }
           </select>
         </label>
-        <label class="full-width">
-          Description
-          <textarea formControlName="description" rows="4"></textarea>
-        </label>
-        <label>
-          Starts
-          <input type="datetime-local" formControlName="startAt">
-        </label>
-        <label>
-          Ends
-          <input type="datetime-local" formControlName="endAt">
-        </label>
-        <label class="full-width">
-          Location
-          <input formControlName="location" placeholder="Ain Draham">
-        </label>
-        <label>
-          Capacity
-          <input type="number" formControlName="capacity" min="1">
-        </label>
-        <label>
-          Waitlist capacity
-          <input type="number" formControlName="waitlistCapacity" min="0">
-        </label>
-        <label>
-          Price (TND)
-          <input type="number" formControlName="price" min="0" step="0.1">
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" formControlName="published">
-          Publish immediately
-        </label>
-        <button class="button button-primary full-width" type="submit" [disabled]="submitting()">
-          {{ submitting() ? 'Creating...' : 'Create event' }}
-        </button>
+        <label class="full-width">Description <textarea formControlName="description" rows="4"></textarea></label>
+        <label>Starts <input type="datetime-local" formControlName="startAt"></label>
+        <label>Ends <input type="datetime-local" formControlName="endAt"></label>
+        <label>Location <input formControlName="location"></label>
+        <label>Organizer ID <input formControlName="organizerId"></label>
+        <label>Capacity <input type="number" formControlName="capacity" min="1"></label>
+        <label>Waitlist capacity <input type="number" formControlName="waitlistCapacity" min="0"></label>
+        <label>Price (TND) <input type="number" formControlName="price" min="0" step="0.1"></label>
+        <label class="checkbox"><input type="checkbox" formControlName="published"> Publish immediately</label>
+        <div class="form-actions full-width">
+          <button class="button button-primary" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Saving...' : editingEventId() ? 'Update event' : 'Create event' }}
+          </button>
+          @if (editingEventId()) {
+            <button class="button button-secondary" type="button" (click)="resetEventForm()">Cancel edit</button>
+          }
+        </div>
       </form>
     </section>
   }

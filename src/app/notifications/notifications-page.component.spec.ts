@@ -18,13 +18,15 @@ describe('NotificationsPageComponent', () => {
           useValue: {
             authenticated: signal(true),
             userId: () => 'user-1',
+            hasAnyRole: () => false,
             login: () => Promise.resolve()
           }
         },
         {
           provide: NotificationApiService,
           useValue: {
-            getForRecipient: () => of([]),
+            getNotifications: () => of([]),
+            getUnreadCount: () => of({ unreadCount: 0 }),
             markAsRead: () => of({}),
             markAllAsRead: () => of({ updatedCount: 0 })
           }
@@ -39,6 +41,6 @@ describe('NotificationsPageComponent', () => {
 
     expect(fixture.componentInstance.notifications()).toEqual([]);
     expect(fixture.nativeElement.querySelector('h1').textContent)
-      .toContain('Your notifications');
+      .toContain('Notifications');
   });
 });

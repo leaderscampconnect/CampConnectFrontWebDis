@@ -117,6 +117,14 @@ h1 {
   margin-bottom: 24px;
 }
 
+.actions,
+.card-actions,
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 h2 {
   font-size: 30px;
   margin-bottom: 0;
@@ -221,11 +229,77 @@ dd {
   color: #172b44;
 }
 
+.button-danger {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
 .empty-state {
   background: #ffffff;
   border: 1px solid #e8e1d7;
   color: #667281;
   text-align: center;
+}
+
+.filter-form {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-bottom: 24px;
+}
+
+.card-actions {
+  margin-top: auto;
+}
+
+.detail-section {
+  align-items: start;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.detail-facts,
+.integration-list {
+  display: grid;
+  gap: 10px;
+}
+
+.detail-facts span {
+  color: #667281;
+  font-size: 13px;
+}
+
+.availability-card,
+.integration-list article {
+  background: #ffffff;
+  border: 1px solid #e8e1d7;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.metric {
+  display: block;
+  font-size: 38px;
+  margin: 12px 0 2px;
+}
+
+.compact-form {
+  grid-template-columns: 1fr;
+}
+
+.form-help {
+  color: #667281;
+  font-size: 12px;
+  margin: 0;
+}
+
+.integration-list article {
+  display: grid;
+  gap: 6px;
+}
+
+.integration-list span,
+.integration-list small {
+  color: #667281;
 }
 
 .create-section {
