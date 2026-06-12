@@ -25,7 +25,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.pollingSub = timer(0, 30000).pipe(
       filter(() => this.auth.authenticated() && !!this.auth.userId()),
-      switchMap(() => this.notificationApi.getUnreadCount(this.auth.userId()!))
+      switchMap(() => {
+        const recipient = this.auth.hasAnyRole('SITE_OWNER') ? this.auth.email()! : this.auth.userId()!;
+        return this.notificationApi.getUnreadCount(recipient);
+      })
     ).subscribe({
       next: (res) => this.unreadCount.set(res.unreadCount),
       error: (err) => console.error('Failed to poll unread count', err)
@@ -60,8 +63,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   fetchNotifications() {
     if (!this.auth.authenticated() || !this.auth.userId()) return;
+    const recipient = this.auth.hasAnyRole('SITE_OWNER') ? this.auth.email()! : this.auth.userId()!;
     this.notificationApi.getNotifications({
-      recipientId: this.auth.userId()!
+      recipientId: recipient
     }).subscribe({
       next: (res) => this.notifications.set(res),
       error: (err) => console.error('Failed to fetch notifications', err)
@@ -70,7 +74,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   markAllAsRead() {
     if (!this.auth.authenticated() || !this.auth.userId() || this.unreadCount() === 0) return;
-    this.notificationApi.markAllAsRead(this.auth.userId()!).subscribe({
+    const recipient = this.auth.hasAnyRole('SITE_OWNER') ? this.auth.email()! : this.auth.userId()!;
+    this.notificationApi.markAllAsRead(recipient).subscribe({
       next: () => {
         this.unreadCount.set(0);
         this.fetchNotifications(); // Refresh list to show as read
