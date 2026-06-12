@@ -1,40 +1,42 @@
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+
+  email = '';
+  password = '';
+  showPassword = false;
   loading = false;
   errorMessage = '';
 
-  constructor(
-    readonly auth: AuthService,
-    private readonly router: Router
-  ) {}
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    if (this.auth.authenticated()) {
-      void this.router.navigateByUrl('/');
-    }
-  }
-
-  async signIn(): Promise<void> {
+  onSubmit(): void {
+    if (!this.email || !this.password) return;
     this.loading = true;
     this.errorMessage = '';
 
-    try {
-      await this.auth.login();
-    } catch {
-      this.errorMessage = 'Impossible de contacter Keycloak. Veuillez réessayer.';
-      this.loading = false;
-    }
+    // Simulation login (à remplacer par un vrai appel API auth)
+    setTimeout(() => {
+      if (this.email && this.password.length >= 6) {
+        this.router.navigate(['/users']);
+      } else {
+        this.errorMessage = 'Email ou mot de passe incorrect';
+        this.loading = false;
+      }
+    }, 800);
+  }
+
+  goToForgotPassword(): void {
+    this.router.navigate(['/forgot-password']);
   }
 }

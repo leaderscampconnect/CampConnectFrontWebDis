@@ -51,37 +51,3 @@ export interface RegistrationResponse {
   waitlistPosition: number;
   event: EventResponse;
 }
-
-export interface EventFilters {
-  category?: EventCategory;
-  status?: EventStatus;
-  location?: string;
-  published?: boolean;
-}
-
-export interface EventAvailabilityResponse {
-  eventId: string;
-  capacity: number;
-  registeredCount: number;
-  availableSeats: number;
-  waitlistCount: number;
-  waitlistCapacity: number;
-  fullyBooked: boolean;
-  occupancyRate: number;
-}
-
-export interface EventNotificationResponse {
-  id: string;
-  recipientId: string;
-  eventId: string | null;
-  type: string;
-  title: string;
-  message: string;
-  read: boolean;
-  createdAt: string;
-}
-
-export interface EventsWithNotificationsResponse {
-  events: EventResponse[];
-  notifications: EventNotificationResponse[];
-}

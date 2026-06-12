@@ -1,25 +1,17 @@
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
-import { CampingSiteEditComponent } from './camping-site-edit.component';
+import { SiteBookingComponent } from './site-booking.component';
 
-describe('CampingSiteEditComponent', () => {
-  let component: CampingSiteEditComponent;
-  let fixture: ComponentFixture<CampingSiteEditComponent>;
+describe('SiteBookingComponent', () => {
+  let component: SiteBookingComponent;
+  let fixture: ComponentFixture<SiteBookingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CampingSiteEditComponent],
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      imports: [SiteBookingComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CampingSiteEditComponent);
+    fixture = TestBed.createComponent(SiteBookingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

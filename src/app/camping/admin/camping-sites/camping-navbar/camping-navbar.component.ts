@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../core/auth.service';;
 
 @Component({
   selector: 'app-camping-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './camping-navbar.component.html',
   styleUrl: './camping-navbar.component.scss'
 })

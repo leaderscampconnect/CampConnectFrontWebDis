@@ -25,7 +25,7 @@ export class CampingSiteListComponent implements OnInit {
 
   constructor(
     private campingService: CampingService,
-    public authService: AuthService,
+    private authService: AuthService,
     private userService: UserService
   ) {}
 

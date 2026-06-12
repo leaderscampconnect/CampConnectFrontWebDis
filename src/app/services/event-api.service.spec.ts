@@ -25,7 +25,7 @@ describe('EventApiService', () => {
   afterEach(() => http.verify());
 
   it('loads published events through the gateway', () => {
-    service.getEvents({ published: true }).subscribe(events => expect(events).toEqual([]));
+    service.getEvents().subscribe(events => expect(events).toEqual([]));
 
     const request = http.expectOne('/api/events?published=true');
     expect(request.request.method).toBe('GET');

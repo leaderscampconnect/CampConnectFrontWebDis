@@ -13,12 +13,7 @@ describe('SiteBookingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SiteBookingsComponent],
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      imports: [SiteBookingsComponent]
     })
     .compileComponents();
 

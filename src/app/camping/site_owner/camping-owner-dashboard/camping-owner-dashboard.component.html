@@ -28,6 +28,12 @@
           <span class="stat-label">My Sites</span>
           <h3>{{ totalSites }}</h3>
         </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Active Sites</span>
+          <h3>{{ activeSites }}</h3>
+        </div>
+
         <div class="stat-card">
           <span class="stat-label">Total Bookings</span>
           <h3>{{ totalBookings }}</h3>
@@ -39,7 +45,7 @@
         <div class="dashboard-card">
           <div class="card-header">
             <h3>Recent Sites</h3>
-            <a routerLink="/admin/campings">View all</a>
+            <a routerLink="/admin/camping-sites">View all</a>
           </div>
 
           <div *ngIf="recentSites.length > 0; else noSites">
