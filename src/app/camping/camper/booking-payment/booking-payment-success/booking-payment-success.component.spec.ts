@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { commonTestingProviders } from '../../../../../core/testing/common-providers';
+import { commonTestingProviders } from '../../../../core/testing/common-providers';
 import { BookingPaymentSuccessComponent } from './booking-payment-success.component';
 
 describe('BookingPaymentSuccessComponent', () => {
