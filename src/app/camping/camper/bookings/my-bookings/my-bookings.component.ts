@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CampingService } from '../../../../services/camping.service';
 import { SiteBooking } from '../../../../models/camping-models';
 import { AuthService } from '../../../../core/auth.service';
@@ -9,7 +8,7 @@ import { UserService } from '../../../../core/services/user.service';
 @Component({
   selector: 'app-my-bookings',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './my-bookings.component.html',
   styleUrl: './my-bookings.component.scss'
 })

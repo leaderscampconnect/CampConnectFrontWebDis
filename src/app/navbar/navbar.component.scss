@@ -184,4 +184,114 @@
     padding: 6px 10px;
     font-size: 12px;
   }
+}/* Dropdown styling */
+.notification-dropdown {
+  position: absolute;
+  top: 45px;
+  right: -10px;
+  width: 320px;
+  background-color: #1a2f4c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: default;
+
+  .dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .view-all {
+      font-size: 12px;
+      color: #96952f;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #b5b438;
+      }
+    }
+  }
+
+  .dropdown-list {
+    max-height: 350px;
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    .dropdown-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .notif-icon {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: rgba(150, 149, 47, 0.15);
+        color: #96952f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .notif-content {
+        flex: 1;
+
+        .notif-title {
+          margin: 0 0 4px 0;
+          font-size: 13px;
+          font-weight: 600;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .notif-desc {
+          margin: 0;
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.6);
+          line-height: 1.4;
+        }
+      }
+    }
+  }
 }

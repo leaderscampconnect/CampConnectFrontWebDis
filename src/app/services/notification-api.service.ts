@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import {
   NotificationFilters,
@@ -60,24 +59,6 @@ export class NotificationApiService {
   getUnreadCount(recipientId: string): Observable<{ unreadCount: number }> {
     return this.http.get<{ unreadCount: number }>(
       `${this.baseUrl}/recipient/${recipientId}/unread-count`
-    );
-  }
-
-  getCampingNotifications(): Observable<NotificationResponse[]> {
-    return this.http.get<{ data: any[] }>('/api/camping-notifications/my-history').pipe(
-      map(response => (response.data || []).map(item => ({
-        id: item._id || item.id,
-        recipientId: item.recipientId,
-        eventId: item.eventId,
-        type: item.eventType || item.type,
-        title: item.subject || item.title,
-        message: item.message,
-        read: item.read || false,
-        readAt: item.readAt,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-        actionUrl: item.actionUrl
-      })))
     );
   }
 }

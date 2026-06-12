@@ -94,20 +94,6 @@ export class NotificationsPageComponent implements OnInit {
     this.refreshUnreadCount();
   }
 
-  loadCampingNotifications(): void {
-    if (!this.auth.authenticated()) return;
-    
-    this.loading.set(true);
-    this.clearFeedback();
-    this.notificationApi.getCampingNotifications().subscribe({
-      next: notifications => {
-        this.notifications.set(notifications);
-        this.loading.set(false);
-      },
-      error: error => this.handleError(error, this.loading)
-    });
-  }
-
   inspectNotification(notification: NotificationResponse): void {
     this.actionKey.set(`inspect-${notification.id}`);
     this.clearFeedback();
