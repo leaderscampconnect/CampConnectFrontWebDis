@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { CampingNavbarComponent } from './camping-navbar.component';
 
@@ -8,7 +9,8 @@ describe('CampingNavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CampingNavbarComponent]
+      imports: [CampingNavbarComponent],
+      providers: [provideRouter([])]
     })
     .compileComponents();
 

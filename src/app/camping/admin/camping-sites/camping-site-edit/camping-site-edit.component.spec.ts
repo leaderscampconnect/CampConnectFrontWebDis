@@ -1,4 +1,7 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { CampingSiteEditComponent } from './camping-site-edit.component';
 
 describe('CampingSiteEditComponent', () => {
@@ -7,7 +10,12 @@ describe('CampingSiteEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CampingSiteEditComponent]
+      imports: [CampingSiteEditComponent],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 
