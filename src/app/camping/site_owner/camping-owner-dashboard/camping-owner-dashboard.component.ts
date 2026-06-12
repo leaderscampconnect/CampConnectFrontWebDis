@@ -118,11 +118,11 @@ export class CampingOwnerDashboardComponent implements OnInit {
   }
 
   get pendingBookings(): number {
-    return this.myBookings.filter(booking => booking.statut === 'EN_ATTENTE').length;
+    return this.myBookings.filter(booking => booking.statut === 'PENDING').length;
   }
 
   get confirmedBookings(): number {
-    return this.myBookings.filter(booking => booking.statut === 'CONFIRMEE').length;
+    return this.myBookings.filter(booking => booking.statut === 'CONFIRMED').length;
   }
 
   get recentSites(): CampingSite[] {
