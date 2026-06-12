@@ -156,8 +156,9 @@ export class NotificationsPageComponent implements OnInit {
 
   resetNotificationForm(): void {
     this.editingNotificationId.set(null);
+    const defaultRecipient = this.auth.hasAnyRole('SITE_OWNER') ? this.auth.email()! : this.auth.userId() ?? '';
     this.notificationForm.reset({
-      recipientId: this.auth.userId() ?? '',
+      recipientId: defaultRecipient,
       eventId: '',
       type: 'GENERAL',
       title: '',
