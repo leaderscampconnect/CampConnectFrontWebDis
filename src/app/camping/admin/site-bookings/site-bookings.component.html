@@ -43,9 +43,9 @@
             <span
               class="badge"
               [ngClass]="{
-                'pending': booking.statut === 'EN_ATTENTE',
-                'CONFIRMEE': booking.statut === 'CONFIRMEE',
-                'ANNULEE': booking.statut === 'ANNULEE'
+                'pending': booking.statut === 'PENDING',
+                'CONFIRMEE': booking.statut === 'CONFIRMED',
+                'ANNULEE': booking.statut === 'CANCELLED'
               }"
             >
               {{ booking.statut }}

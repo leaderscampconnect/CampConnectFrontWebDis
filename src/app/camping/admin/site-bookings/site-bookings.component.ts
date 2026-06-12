@@ -80,7 +80,7 @@ isGuide(): boolean {
 }
 
 isCancelable(booking: any): boolean {
-  return booking.statut === 'EN_ATTENTE';
+  return booking.statut === 'PENDING' || booking.statut === 'CONFIRMED';
 }
 
   cancelBooking(booking: SiteBooking): void {
