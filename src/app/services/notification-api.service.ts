@@ -12,7 +12,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class NotificationApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/notifications';
+  private readonly baseUrl = '/api/notifications/v2';
 
   getNotifications(filters: NotificationFilters = {}): Observable<NotificationResponse[]> {
     const params: Record<string, string> = {};
@@ -68,7 +68,7 @@ export class NotificationApiService {
       map(response => (response.data || []).map(item => ({
         id: item._id || item.id,
         recipientId: item.recipientId,
-        eventId: item.eventId,
+        eventId: item.eventId || item.eventId,
         type: item.eventType || item.type,
         title: item.subject || item.title,
         message: item.message,
