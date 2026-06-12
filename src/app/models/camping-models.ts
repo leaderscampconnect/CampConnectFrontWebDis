@@ -26,7 +26,7 @@ export interface SiteBooking {
   dateDebut: string;
   dateFin: string;
   numberOfGuests: number;
-  statut?: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE';
+  statut?: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
   siteId: number;
   utilisateurId?: number;
   utilisateurEmail?: string;
@@ -35,7 +35,7 @@ export interface SiteBooking {
 }
 
 export interface UpdateSiteBooking {
-  statut: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE';
+  statut: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
 }
 
 export interface SiteAvailability {
