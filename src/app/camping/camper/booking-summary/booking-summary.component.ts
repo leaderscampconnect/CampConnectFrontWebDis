@@ -45,9 +45,14 @@ export class BookingSummaryComponent implements OnInit {
 confirmPayment(): void {
   if (!this.bookingData) return;
 
+  if (!this.authService.authenticated()) {
+    this.authService.login();
+    return;
+  }
+
   const email = this.authService.email();
   if (!email) {
-    Swal.fire('Error', 'Not authenticated', 'error');
+    Swal.fire('Error', 'Your account is missing an email address.', 'error');
     return;
   }
 
