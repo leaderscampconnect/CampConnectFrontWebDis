@@ -17,12 +17,16 @@
         <a routerLink="/admin/campings" routerLinkActive="active">Manage Campings</a>
         <a routerLink="/admin/bookings" routerLinkActive="active">All Bookings</a>
         <a routerLink="/users" routerLinkActive="active">Users</a>
+        <a routerLink="/admin/Market/listProduct" routerLinkActive="active">Products</a>
+
       } @else if (auth.hasAnyRole('SITE_OWNER')) {
         <a routerLink="/owner/dashboard" routerLinkActive="active">Owner Dashboard</a>
       } @else {
         <a routerLink="/camper/campings" routerLinkActive="active">Explore Campings</a>
         @if (auth.authenticated()) {
           <a routerLink="/camper/bookings" routerLinkActive="active">My Bookings</a>
+                <a routerLink="/admin/Market/listProduct" routerLinkActive="active">Products</a>
+
         }
       }
       <a routerLink="/events" routerLinkActive="active">Events</a>
