@@ -92,6 +92,22 @@ export const routes: Routes = [
     path: 'admin/bookings',
     loadComponent: () => import('./camping/admin/site-bookings/site-bookings.component').then(m => m.SiteBookingsComponent)
   },
+  {
+    path: 'admin/Market/listProduct',
+    loadComponent: () => import('./produit/list-product/list-product.component').then(m => m.ListProductComponent)
+  },
+    {
+    path: 'add-product',
+    loadComponent: () => import('./produit/add-product/add-product.component').then(m => m.AddProductComponent)
+  },
+  {
+    path: 'edit-product/:id',
+    loadComponent: () => import('./produit/add-product/add-product.component').then(m => m.AddProductComponent)
+  },
+  {
+    path: 'stock-product/:id',
+    loadComponent: () => import('./produit/stock-product/stock-product.component').then(m => m.StockProductComponent)
+  },
   // Camper routes
   {
     path: 'camper/campings',
@@ -116,18 +132,6 @@ export const routes: Routes = [
   {
     path: 'booking-payment-cancel',
     loadComponent: () => import('./camping/camper/booking-payment/booking-payment-cancel/booking-payment-cancel.component').then(m => m.BookingPaymentCancelComponent)
-  },
-    {
-    path: 'add-product',
-    loadComponent: () => import('./produit/add-product/add-product.component').then(m => m.AddProductComponent)
-  },
-  {
-    path: 'edit-product/:id',
-    loadComponent: () => import('./produit/add-product/add-product.component').then(m => m.AddProductComponent)
-  },
-  {
-    path: 'stock-product/:id',
-    loadComponent: () => import('./produit/stock-product/stock-product.component').then(m => m.StockProductComponent)
   },
   
   // Site Owner routes
