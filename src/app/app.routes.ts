@@ -129,6 +129,7 @@ export const routes: Routes = [
     path: 'stock-product/:id',
     loadComponent: () => import('./produit/stock-product/stock-product.component').then(m => m.StockProductComponent)
   },
+  
   // Site Owner routes
   {
     path: 'owner/dashboard',
